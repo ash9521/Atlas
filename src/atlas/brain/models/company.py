@@ -8,7 +8,7 @@ from dataclasses import dataclass
 from uuid import UUID, uuid4
 
 
-@dataclass(slots=True)
+@dataclass(slots=True, frozen=True)
 class Company:
     """
     Represents the identity of a company.
