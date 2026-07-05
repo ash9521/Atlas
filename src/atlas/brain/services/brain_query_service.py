@@ -1,8 +1,7 @@
 ﻿"""
 Brain query service.
 
-Provides read-only access to the Atlas Brain while preserving
-the public API established during Sprint 2.
+Provides read-only query capabilities over the Atlas Brain.
 """
 
 from __future__ import annotations
@@ -14,6 +13,7 @@ from atlas.brain.repositories import (
     CompanyRepository,
     EvidenceRepository,
 )
+from atlas.brain.services.brain_query import BrainQuery
 from atlas.brain.services.query_result import QueryResult
 
 
@@ -58,12 +58,33 @@ class BrainQueryService:
         self,
         company_id: UUID,
     ) -> QueryResult | None:
-        company = self.get_company(company_id)
+        return self.query(
+            BrainQuery(
+                company_id=company_id,
+            )
+        )
+
+    def query(
+        self,
+        query: BrainQuery,
+    ) -> QueryResult | None:
+        company = self.get_company(query.company_id)
 
         if company is None:
             return None
 
+        evidence = self.evidence_for_company(
+            query.company_id
+        )
+
+        if query.evidence_type is not None:
+            evidence = tuple(
+                item
+                for item in evidence
+                if item.evidence_type == query.evidence_type
+            )
+
         return QueryResult(
             company=company,
-            evidence=self.evidence_for_company(company_id),
+            evidence=evidence,
         )
