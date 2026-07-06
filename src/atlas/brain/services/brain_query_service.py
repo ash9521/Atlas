@@ -8,6 +8,7 @@ from __future__ import annotations
 
 from uuid import UUID
 
+from atlas.brain.conclusions import ConclusionEngine, CompanyConclusions
 from atlas.brain.facts import FactEngine
 from atlas.brain.models import Company, Evidence
 from atlas.brain.queries import BrainQuery, QueryResult
@@ -32,6 +33,7 @@ class BrainQueryService:
         self._companies = company_repository
         self._evidence = evidence_repository
         self._fact_engine = FactEngine()
+        self._conclusion_engine = ConclusionEngine()
 
     def company_exists(
         self,
@@ -77,9 +79,7 @@ class BrainQueryService:
         if company is None:
             return None
 
-        evidence = self.evidence_for_company(
-            query.company_id
-        )
+        evidence = self.evidence_for_company(query.company_id)
 
         if query.evidence_type is not None:
             evidence = tuple(
@@ -119,3 +119,15 @@ class BrainQueryService:
             return None
 
         return self._fact_engine.compute(result)
+
+    def company_conclusions(
+        self,
+        company_id: UUID,
+    ) -> CompanyConclusions | None:
+
+        facts = self.company_facts(company_id)
+
+        if facts is None:
+            return None
+
+        return self._conclusion_engine.compute(facts)
