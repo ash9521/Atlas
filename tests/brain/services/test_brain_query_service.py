@@ -9,7 +9,7 @@ from atlas.brain.repositories import (
     CompanyRepository,
     EvidenceRepository,
 )
-from atlas.brain.services import BrainQueryService
+from atlas.brain.services.brain_query_service import BrainQueryService
 
 
 def create_service() -> tuple[BrainQueryService, Company]:
@@ -72,3 +72,4 @@ def test_query_company_returns_query_result() -> None:
     assert result is not None
     assert result.company == company
     assert result.evidence[0].company_id == company.id
+

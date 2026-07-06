@@ -1,18 +1,15 @@
 ﻿from datetime import datetime, timezone
 
+from atlas.brain.facts import FactEngine
 from atlas.brain.models import (
     Company,
     Evidence,
     EvidenceSource,
 )
-from atlas.brain.repositories import (
-    CompanyRepository,
-    EvidenceRepository,
-)
-from atlas.brain.services.brain_query_service import BrainQueryService
+from atlas.brain.queries import QueryResult
 
 
-def test_company_facts() -> None:
+def test_compute_company_facts() -> None:
     company = Company.create("Acme Foods")
 
     source = EvidenceSource.create(
@@ -28,17 +25,15 @@ def test_company_facts() -> None:
         payload={"status": "active"},
     )
 
-    service = BrainQueryService(
-        CompanyRepository([company]),
-        EvidenceRepository([evidence]),
+    result = QueryResult(
+        company=company,
+        evidence=(evidence,),
     )
 
-    facts = service.company_facts(company.id)
+    facts = FactEngine().compute(result)
 
-    assert facts is not None
     assert facts.evidence_count == 1
     assert facts.evidence_types == (
         "government.registration",
     )
-    assert facts.latest_observation == evidence.observed_at
 

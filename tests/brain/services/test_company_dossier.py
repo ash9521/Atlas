@@ -1,4 +1,4 @@
-﻿from atlas.brain.services import CompanyDossier
+﻿from atlas.brain.services.company_dossier import CompanyDossier
 
 
 def test_dossier_evidence_count() -> None:
@@ -8,3 +8,4 @@ def test_dossier_evidence_count() -> None:
     )
 
     assert dossier.evidence_count == 0
+

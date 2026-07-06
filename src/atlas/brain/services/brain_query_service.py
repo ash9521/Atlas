@@ -8,18 +8,21 @@ from __future__ import annotations
 
 from uuid import UUID
 
+from atlas.brain.facts import FactEngine
 from atlas.brain.models import Company, Evidence
+from atlas.brain.queries import BrainQuery, QueryResult
 from atlas.brain.repositories import (
     CompanyRepository,
     EvidenceRepository,
 )
-from atlas.brain.services.brain_query import BrainQuery
 from atlas.brain.services.company_dossier import CompanyDossier
 from atlas.brain.services.company_facts import CompanyFacts
-from atlas.brain.services.query_result import QueryResult
 
 
 class BrainQueryService:
+    """
+    Read-only query service over the Atlas Brain.
+    """
 
     def __init__(
         self,
@@ -28,6 +31,7 @@ class BrainQueryService:
     ) -> None:
         self._companies = company_repository
         self._evidence = evidence_repository
+        self._fact_engine = FactEngine()
 
     def company_exists(
         self,
@@ -58,7 +62,9 @@ class BrainQueryService:
         company_id: UUID,
     ) -> QueryResult | None:
         return self.query(
-            BrainQuery(company_id=company_id)
+            BrainQuery(
+                company_id=company_id,
+            )
         )
 
     def query(
@@ -71,7 +77,9 @@ class BrainQueryService:
         if company is None:
             return None
 
-        evidence = self.evidence_for_company(query.company_id)
+        evidence = self.evidence_for_company(
+            query.company_id
+        )
 
         if query.evidence_type is not None:
             evidence = tuple(
@@ -110,28 +118,4 @@ class BrainQueryService:
         if result is None:
             return None
 
-        evidence = result.evidence
-
-        latest = (
-            max(
-                item.observed_at
-                for item in evidence
-            )
-            if evidence
-            else None
-        )
-
-        evidence_types = tuple(
-            sorted(
-                {
-                    item.evidence_type
-                    for item in evidence
-                }
-            )
-        )
-
-        return CompanyFacts(
-            evidence_count=len(evidence),
-            evidence_types=evidence_types,
-            latest_observation=latest,
-        )
+        return self._fact_engine.compute(result)
