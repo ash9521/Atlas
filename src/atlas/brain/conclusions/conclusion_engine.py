@@ -7,7 +7,7 @@ Computes conclusions from CompanyFacts.
 from __future__ import annotations
 
 from atlas.brain.conclusions.company_conclusions import CompanyConclusions
-from atlas.brain.services.company_facts import CompanyFacts
+from atlas.brain.facts.company_facts import CompanyFacts
 
 
 class ConclusionEngine:

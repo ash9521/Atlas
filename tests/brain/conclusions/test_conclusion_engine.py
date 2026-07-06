@@ -1,7 +1,7 @@
 ﻿from datetime import datetime, timezone
 
 from atlas.brain.conclusions import ConclusionEngine
-from atlas.brain.services.company_facts import CompanyFacts
+from atlas.brain.facts.company_facts import CompanyFacts
 
 
 def test_compute_company_conclusions() -> None:

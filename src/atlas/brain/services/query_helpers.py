@@ -1,14 +1,17 @@
 ﻿"""
-Common Brain query helpers.
+Shared helpers for Brain query services.
 """
 
 from __future__ import annotations
 
-from atlas.brain.services.query_result import QueryResult
+from atlas.brain.queries.query_result import QueryResult
 
 
-def has_evidence(result: QueryResult) -> bool:
+def evidence_count(
+    result: QueryResult,
+) -> int:
     """
-    Returns True when at least one evidence record exists.
+    Return the number of evidence records in a query result.
     """
-    return len(result.evidence) > 0
+
+    return len(result.evidence)

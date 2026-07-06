@@ -7,7 +7,7 @@ Computes facts from immutable evidence.
 from __future__ import annotations
 
 from atlas.brain.queries import QueryResult
-from atlas.brain.services.company_facts import CompanyFacts
+from atlas.brain.facts.company_facts import CompanyFacts
 
 
 class FactEngine:
