@@ -1,9 +1,26 @@
+from pathlib import Path
+
 from atlas.buyer_engine.providers.kompass import (
     KompassParser,
 )
 
 
-def test_parser_exists() -> None:
+def test_parse_fixture() -> None:
+    payload = Path(
+        "tests/fixtures/providers/kompass/search_turmeric_germany.html"
+    ).read_text(
+        encoding="utf-8",
+    )
+
     parser = KompassParser()
 
-    assert parser is not None
+    buyers = parser.parse(
+        payload,
+    )
+
+    assert len(buyers) > 0
+
+    first = buyers[0]
+
+    assert first.company != ""
+    assert first.source == "kompass"
