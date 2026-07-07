@@ -2,25 +2,27 @@ from __future__ import annotations
 
 from bs4 import BeautifulSoup
 
-from atlas.buyer_engine.models import BuyerRecord
+from atlas.buyer_engine.providers.kompass.models import (
+    KompassParsedCompany,
+)
 
 
 class KompassParser:
     """
-    Parses Kompass HTML into BuyerRecord objects.
+    Parses Kompass HTML into provider-native models.
     """
 
     def parse(
         self,
         payload: str,
-    ) -> tuple[BuyerRecord, ...]:
+    ) -> tuple[KompassParsedCompany, ...]:
 
         soup = BeautifulSoup(
             payload,
             "lxml",
         )
 
-        buyers: list[BuyerRecord] = []
+        companies: list[KompassParsedCompany] = []
 
         for company in soup.select("div.prod_list"):
 
@@ -71,14 +73,13 @@ class KompassParser:
             if isinstance(identifier, str):
                 source_id = identifier
 
-            buyers.append(
-                BuyerRecord(
+            companies.append(
+                KompassParsedCompany(
                     company=company_name,
                     country=country,
                     website=website,
-                    source="kompass",
                     source_id=source_id,
                 )
             )
 
-        return tuple(buyers)
+        return tuple(companies)

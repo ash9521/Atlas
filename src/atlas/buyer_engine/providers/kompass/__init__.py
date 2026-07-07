@@ -1,11 +1,13 @@
-"""
-Kompass provider.
-"""
-
-from .provider import KompassProvider
+from .client import KompassClient
+from .mapper import KompassMapper
 from .parser import KompassParser
+from .provider import KompassProvider
+from .service import KompassService
 
 __all__ = [
-    "KompassProvider",
+    "KompassClient",
+    "KompassMapper",
     "KompassParser",
+    "KompassProvider",
+    "KompassService",
 ]
