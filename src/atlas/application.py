@@ -1,5 +1,14 @@
 from pathlib import Path
 
+from atlas.brain.models import Company
+from atlas.brain.repositories import CompanyRepository
+from atlas.discovery.connectors import ExcelConnector
+from atlas.discovery.ingestion import EvidenceFactory
+from atlas.discovery.models import InputSource
+from atlas.discovery.normalization import ObservationNormalizer
+from atlas.discovery.resolution import CompanyResolver
+from atlas.discovery.services import DiscoveryPipelineService
+
 
 class Application:
     """
@@ -28,5 +37,46 @@ class Application:
             return 1
 
         print(f"Loading: {filename}")
+        print()
+
+        repository = CompanyRepository(
+            [
+                Company.create(
+                    legal_name="ABC Imports",
+                ),
+                Company.create(
+                    legal_name="Nordic Foods",
+                ),
+                Company.create(
+                    legal_name="Global Spice Trading",
+                ),
+                Company.create(
+                    legal_name="Bharat Foods",
+                ),
+                Company.create(
+                    legal_name="Sunrise Imports",
+                ),
+            ]
+        )
+
+        pipeline = DiscoveryPipelineService(
+            connector=ExcelConnector(),
+            normalizer=ObservationNormalizer(),
+            resolver=CompanyResolver(
+                repository,
+            ),
+            evidence_factory=EvidenceFactory(),
+        )
+
+        source = InputSource.create(
+            source_type="file",
+            location=str(filename),
+        )
+
+        evidence = pipeline.run(source)
+
+        print(f"Evidence Created: {len(evidence)}")
+        print()
+        print("Completed successfully.")
 
         return 0
