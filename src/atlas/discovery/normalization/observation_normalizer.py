@@ -18,7 +18,7 @@ class ObservationNormalizer:
         observation: Observation,
     ) -> NormalizedObservation:
         payload = {
-            key: self._normalize_value(value)
+            self._normalize_key(key): self._normalize_value(value)
             for key, value in observation.payload.items()
             if self._keep_value(value)
         }
@@ -27,6 +27,12 @@ class ObservationNormalizer:
             observation=observation,
             payload=payload,
         )
+
+    def _normalize_key(
+        self,
+        key: str,
+    ) -> str:
+        return " ".join(key.strip().split())
 
     def _normalize_value(
         self,

@@ -54,3 +54,16 @@ def test_normalizer_removes_empty_values() -> None:
     assert normalized.payload == {
         "Company": "ABC",
     }
+
+def test_normalizer_trims_field_names() -> None:
+    observation = Observation.create(
+        connector="excel",
+        payload={
+            "  Company   ": "ABC Imports",
+        },
+    )
+
+    normalized = ObservationNormalizer().normalize(observation)
+
+    assert "Company" in normalized.payload
+    assert "  Company   " not in normalized.payload
