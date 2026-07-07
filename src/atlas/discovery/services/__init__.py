@@ -1,5 +1,5 @@
-"""
-Discovery services package.
+from .discovery_pipeline_service import DiscoveryPipelineService
 
-Currently reserved for future orchestration services.
-"""
+__all__ = [
+    "DiscoveryPipelineService",
+]
