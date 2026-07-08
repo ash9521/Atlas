@@ -4,7 +4,6 @@ version = "0.1.0"
 description = "AI-powered export intelligence platform"
 readme = "README.md"
 requires-python = ">=3.13"
-
 dependencies = [
     "fastapi>=0.116,<1.0",
     "uvicorn[standard]>=0.35,<1.0",
@@ -14,8 +13,7 @@ dependencies = [
     "pydantic-settings>=2.10,<3.0",
     "httpx>=0.28,<1.0",
     "openpyxl>=3.1,<4.0",
-    "beautifulsoup4>=4.13,<5.0",
-    "lxml>=6.0,<7.0",
+    "python-multipart>=0.0.20,<1.0",
 ]
 
 [project.optional-dependencies]

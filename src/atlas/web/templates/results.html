@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>
+
+Results
+
+</h2>
+
+<p>
+
+Product:
+<strong>{{ product }}</strong>
+
+<br>
+
+Country:
+<strong>{{ country }}</strong>
+
+</p>
+
+<table border="1" cellpadding="8">
+
+<tr>
+
+<th>Company</th>
+
+<th>Country</th>
+
+<th>Website</th>
+
+<th>Source</th>
+
+</tr>
+
+{% for buyer in buyers %}
+
+<tr>
+
+<td>{{ buyer.company }}</td>
+
+<td>{{ buyer.country }}</td>
+
+<td>
+
+{% if buyer.website %}
+
+<a href="{{ buyer.website }}">
+
+{{ buyer.website }}
+
+</a>
+
+{% endif %}
+
+</td>
+
+<td>{{ buyer.source }}</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+{% if buyers|length == 0 %}
+
+<p>
+
+No buyers found.
+
+</p>
+
+{% endif %}
+
+{% endblock %}

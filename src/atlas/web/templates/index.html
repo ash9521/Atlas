@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<form method="post" action="/search">
+
+<label>
+
+Product
+
+</label>
+
+<br>
+
+<input
+    name="product"
+    value="turmeric"
+    required>
+
+<br><br>
+
+<label>
+
+Country
+
+</label>
+
+<br>
+
+<input
+    name="country"
+    value="Germany"
+    required>
+
+<br><br>
+
+<button type="submit">
+
+Search
+
+</button>
+
+</form>
+
+{% endblock %}
